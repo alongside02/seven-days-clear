@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>第七天晴</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css?v=4" />
+  </head>
+  <body>
+    <main class="shell" aria-live="polite">
+      <section class="topline">
+        <div>
+          <p class="kicker">TEXT ONLY / 7 DAYS / NO IMAGE SAFEHOUSE</p>
+          <h1>第七天晴</h1>
+        </div>
+        <div class="title-actions">
+          <button id="continueButton" class="ghost" type="button">继续</button>
+          <button id="restartButton" class="ghost" type="button">清空</button>
+        </div>
+      </section>
+
+      <section id="startScreen" class="screen start-screen">
+        <div class="warning-strip">七天后退租。七天内不要把自己喂给屏幕。</div>
+        <div class="prose loud">
+          <p>她醒来。手机像一块热铁贴在枕边，昨夜的页面还亮着：同类、同城、同样的楼道、同样的门。</p>
+          <p>房间很小，但小得很有说服力。它每天都在替世界发言：别出去，别试，别麻烦别人。</p>
+          <p>今天是第一天。没有教程。没有旁白负责救她。只有三件东西：钥匙、零钱、还能动的手。</p>
+        </div>
+        <button id="startButton" class="primary" type="button">开局</button>
+      </section>
+
+      <section id="gameScreen" class="screen hidden">
+        <aside class="status">
+          <div class="status-block big">
+            <span class="status-label">倒计时</span>
+            <strong id="countdownLabel">D-7</strong>
+          </div>
+          <div class="status-block">
+            <span class="status-label">日期</span>
+            <strong id="dayLabel">第一天</strong>
+          </div>
+          <div class="status-block">
+            <span class="status-label">时段</span>
+            <strong id="phaseLabel">早晨</strong>
+          </div>
+          <div class="status-block">
+            <span class="status-label">包里</span>
+            <strong id="bagLabel">钥匙、零钱</strong>
+          </div>
+          <div class="status-block">
+            <span class="status-label">昨夜口供</span>
+            <strong id="noteLabel">空白</strong>
+          </div>
+          <div class="status-block readout">
+            <span class="status-label">状态判读</span>
+            <strong id="stateReadout">系统待机</strong>
+          </div>
+          <div id="phaseTrack" class="phase-track" aria-label="七天进度"></div>
+          <div id="meters" class="meters"></div>
+        </aside>
+
+        <article class="panel">
+          <div id="systemLine" class="system-line"></div>
+          <div id="lastAction" class="last-action hidden"></div>
+          <div id="story" class="story"></div>
+          <div id="choices" class="choices"></div>
+        </article>
+      </section>
+
+      <section id="endingScreen" class="screen hidden">
+        <p id="endingKicker" class="kicker">END REPORT</p>
+        <h2 id="endingTitle"></h2>
+        <div id="endingStats" class="ending-stats"></div>
+        <div id="endingBody" class="prose loud"></div>
+        <div class="ending-actions">
+          <button id="playAgainButton" class="primary" type="button">再压七天</button>
+          <button id="reviewButton" class="ghost" type="button">翻口供</button>
+        </div>
+      </section>
+
+      <dialog id="reviewDialog">
+        <form method="dialog">
+          <header class="dialog-head">
+            <h2>七天口供</h2>
+            <button class="ghost compact" value="close" type="submit">关闭</button>
+          </header>
+          <ol id="reviewList" class="review-list"></ol>
+        </form>
+      </dialog>
+    </main>
+
+    <script src="./app.js?v=4"></script>
+  </body>
+</html>
