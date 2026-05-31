@@ -18,6 +18,7 @@ const baseline = {
   wording: 0,
   bag: ["钥匙", "零钱"],
   note: "空白",
+  lastAction: null,
   flags: {},
   review: [],
 };
@@ -37,9 +38,13 @@ const elements = {
   phaseLabel: $("phaseLabel"),
   bagLabel: $("bagLabel"),
   noteLabel: $("noteLabel"),
+  stateReadout: $("stateReadout"),
+  phaseTrack: $("phaseTrack"),
   meters: $("meters"),
+  lastAction: $("lastAction"),
   continueButton: $("continueButton"),
   endingTitle: $("endingTitle"),
+  endingStats: $("endingStats"),
   endingBody: $("endingBody"),
   reviewDialog: $("reviewDialog"),
   reviewList: $("reviewList"),
@@ -356,8 +361,11 @@ function render() {
   elements.phaseLabel.textContent = phases[state.phase];
   elements.bagLabel.textContent = state.bag.length ? state.bag.join("、") : "空";
   elements.noteLabel.textContent = state.note || "空白";
+  elements.stateReadout.textContent = getStateReadout();
 
+  renderPhaseTrack();
   renderMeters();
+  renderLastAction();
 
   const current = scenes[state.day][state.phase];
   elements.systemLine.textContent = current.system;
@@ -395,8 +403,40 @@ function renderMeters() {
     .join("");
 }
 
+function renderPhaseTrack() {
+  const total = 21;
+  const phaseOffset = { morning: 1, day: 2, night: 3 }[state.phase] || 1;
+  const currentStep = Math.min(total, (state.day - 1) * 3 + phaseOffset);
+
+  elements.phaseTrack.innerHTML = Array.from({ length: total }, (_, index) => {
+    const step = index + 1;
+    const className = step < currentStep ? "done" : step === currentStep ? "current" : "";
+    return `<span class="${className}" title="进度 ${step}/${total}"></span>`;
+  }).join("");
+}
+
+function renderLastAction() {
+  if (!state.lastAction) {
+    elements.lastAction.classList.add("hidden");
+    elements.lastAction.textContent = "";
+    return;
+  }
+
+  elements.lastAction.classList.remove("hidden");
+  elements.lastAction.innerHTML = `
+    <span>刚刚：</span>${escapeHtml(state.lastAction.text)}
+    <small>${escapeHtml(state.lastAction.delta || "没有明显读数变化")}</small>
+  `;
+}
+
 function choose(item) {
+  const before = snapshotStats();
   applyChoice(item);
+  const after = snapshotStats();
+  state.lastAction = {
+    text: item.memory,
+    delta: describeDelta(before, after),
+  };
   state.review.push({
     day: dayNames[state.day],
     phase: phases[state.phase],
@@ -412,6 +452,59 @@ function choose(item) {
 
   save();
   render();
+}
+
+function snapshotStats() {
+  return {
+    clarity: state.clarity,
+    echo: state.echo,
+    room: state.room,
+    steps: state.steps,
+    wording: state.wording,
+  };
+}
+
+function describeDelta(before, after) {
+  const labels = {
+    clarity: "清醒",
+    echo: "噪声",
+    room: "墙感",
+    steps: "动作",
+    wording: "措辞",
+  };
+
+  return Object.keys(labels)
+    .map((key) => {
+      const delta = after[key] - before[key];
+      if (!delta) {
+        return "";
+      }
+      return `${labels[key]} ${delta > 0 ? "+" : ""}${delta}`;
+    })
+    .filter(Boolean)
+    .join(" / ");
+}
+
+function getStateReadout() {
+  if (state.echo >= 9) {
+    return "屏幕正在反咬";
+  }
+  if (state.room >= 9) {
+    return "房间感过载";
+  }
+  if (state.steps >= 13 && state.room <= 4) {
+    return "出口已成形";
+  }
+  if (state.clarity >= 9) {
+    return "清醒占上风";
+  }
+  if (state.steps >= 7) {
+    return "身体开始记路";
+  }
+  if (state.wording <= -4) {
+    return "叙述正在收紧";
+  }
+  return "临界稳定";
 }
 
 function applyChoice(item) {
@@ -515,6 +608,15 @@ function renderEnding(endingData) {
   show("ending");
   elements.continueButton.disabled = false;
   elements.endingTitle.textContent = endingData.title;
+  elements.endingStats.innerHTML = [
+    ["噪声", state.echo],
+    ["墙感", state.room],
+    ["动作", state.steps],
+    ["清醒", state.clarity],
+    ["措辞", state.wording],
+  ]
+    .map(([label, value]) => `<span>${label}<strong>${value}</strong></span>`)
+    .join("");
   elements.endingBody.innerHTML = endingData.body.map((line) => `<p>${escapeHtml(line)}</p>`).join("");
 }
 

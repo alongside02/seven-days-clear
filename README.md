@@ -1,47 +1,47 @@
 # 第七天晴
 
-一个纯文字七日模拟器。新版把界面和文本推向更高压的方向：倒计时、噪声、墙感、动作、清醒等状态会直接出现在界面里，剧情也更锋利。
+一个纯文字、无美术资源的 7 日模拟器。玩家扮演一位即将退租的女性，在手机消息流、短租房、日记措辞和很小的现实行动之间做选择。
 
-## 游玩方式
+**在线游玩：** [https://alongside02.github.io/seven-days-clear/](https://alongside02.github.io/seven-days-clear/)
 
-直接用浏览器打开：
+## 这是什么
+
+《第七天晴》表面是退租前七天的生活管理，实际围绕“观看、叙述、身体行动”展开。游戏不会直接解释主题，而是让数值和选项一点点暴露：你看见越多相似惨状，房间越像世界；你做越多具体行动，世界越不只剩房间。
+
+## 特色
+
+- 纯 HTML/CSS/JavaScript，无构建步骤，无图片资源。
+- 7 天 × 早晨/白天/夜晚，共 21 个选择节点。
+- 隐性状态外显为高压仪表盘：噪声、墙感、动作、清醒、措辞。
+- 多结局，包括“未命名”“同温层”“续租”“空包”“晴天误差”等。
+- 本地存档、重开、七天回顾、键盘 `1`/`2`/`3` 快捷选择。
+- 手机端已适配，320px 宽度下无横向溢出。
+
+## 本地运行
+
+直接打开：
 
 ```text
 D:\GameProjects\SevenDaysClear\index.html
 ```
 
-如果浏览器缓存旧脚本，使用本地服务地址更稳定：
+或者启动任意静态服务器后访问：
 
 ```text
 http://127.0.0.1:4177/index.html
 ```
 
-## 操作
-
-- 鼠标点击选项。
-- 键盘 `1`、`2`、`3` 可快速选择。
-- `继续` 会读取当前浏览器存档。
-- `清空` 会清除当前新版存档并回到开局页。
-- `翻口供` 会查看本轮七天记录。
-
-## 上传到 GitHub Pages
-
-这是纯静态网页，上传到 GitHub 后可以直接用 GitHub Pages 打开。
-
-1. 在 GitHub 新建一个仓库，例如 `seven-days-clear`。
-2. 把本目录里的文件上传到仓库根目录：
-   - `index.html`
-   - `styles.css`
-   - `app.js`
-   - `README.md`
-   - `.nojekyll`
-3. 进入仓库 `Settings` -> `Pages`。
-4. `Build and deployment` 选择 `Deploy from a branch`。
-5. `Branch` 选择 `main`，目录选择 `/root`，保存。
-6. 等一两分钟后，页面会出现在：
+## 文件结构
 
 ```text
-https://你的GitHub用户名.github.io/seven-days-clear/
+index.html   页面结构
+styles.css   视觉与移动端适配
+app.js       剧情、状态、结局与存档逻辑
+.nojekyll    GitHub Pages 静态发布标记
 ```
 
-如果仓库名改成别的，就把网址最后一段换成对应仓库名。
+## 发布
+
+项目已通过 GitHub Pages 从 `main` 分支根目录发布：
+
+[https://alongside02.github.io/seven-days-clear/](https://alongside02.github.io/seven-days-clear/)
